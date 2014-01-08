@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+    <package name="/kpi" namespace="/kpi" extends="struts-default">
+    	
+    	<!--  NSP interceptor -->
+    	<interceptors>   		
+   			<interceptor name="nspsso" class="com.ncs.nsp.sensing.interceptor.NSPInterceptor"/>
+   		</interceptors>
+   		
+   		<!-- global Action result -->
+ 		<global-results>
+       		<result name="error" type="dispatcher">/jsp/nsp_error.jsp</result>
+   		</global-results>
+ 		
+ 		<!-- Add actions here -->
+ 		<action name="KPIView" class="com.ncs.nsp.sensing.action.kpi.KPIActionView">
+ 			<interceptor-ref name="nspsso" /> 
+        	<interceptor-ref name="defaultStack" />
+			<result name="success" >/jsp/nsp_kpistat.jsp</result>
+        </action>
+        
+        <action name="KPIAction" class="com.ncs.nsp.sensing.action.kpi.KPIAction">
+        	<interceptor-ref name="store">
+            	<param name="operationMode">RETRIEVE</param>
+        	</interceptor-ref>
+			<interceptor-ref name="nspsso" /> 
+        	<interceptor-ref name="defaultStack" />
+        	<result name="success" >/jsp/nsp_kpistat.jsp</result>
+			<result name="input" >/jsp/nsp_kpistat.jsp</result>
+      	</action>
+        
+         <action name="KPISubmitAction" class="com.ncs.nsp.sensing.action.kpi.KPISubmitAction">
+         	<interceptor-ref name="store">
+            	<param name="operationMode">STORE</param>
+        	</interceptor-ref>
+        	<interceptor-ref name="nspsso" /> 
+			<interceptor-ref name="defaultStack" />
+         	<result name="success" type="redirect">KPIAction.action</result>
+        	<result name="input" type="redirect">KPIAction.action</result>
+         </action>
+        
+    </package>
+</struts>

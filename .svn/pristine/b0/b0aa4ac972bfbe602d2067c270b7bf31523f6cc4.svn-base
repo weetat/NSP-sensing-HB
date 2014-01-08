@@ -1,0 +1,95 @@
+<project name="sensingAdmin" default="buildSensingAdmin" basedir=".">
+
+	<description>ANT build for nsp sensingadmin</description>
+
+	<!-- Set global properties for this build -->
+	<echo message="Set global properties for this build" />
+	<property name="classes" location="..\build\classes"/>
+	<property name="web" location="..\WebContent"/>
+	<property name="src" location="..\src"/>
+	<property name="temp" location="temp"/>
+	<property name="antBuildPath" location="deploy"/>
+	<property name="buildProduction" location="${antBuildPath}\Production"/>		
+	<property name="buildStage" location="${antBuildPath}\Staging"/>	
+	<property name="buildDev" location="${antBuildPath}\Dev"/>
+	<property name="buildLocal" location="${antBuildPath}\Local"/>
+	<property name="file.name" value="sensingadmin.war" />
+	
+	 
+	<!-- Delete existing build directories -->
+	<target name="clean">
+		<echo message="Delete existing build directories" />
+		<delete dir="${buildProduction}" />
+		<delete dir="${buildStage}" />	
+		<delete dir="${buildDev}" />
+		<delete dir="${buildLocal}" />
+		<delete dir="${temp}" />
+		<delete dir="${temp}/bin" />
+	</target>
+	
+	<!-- Create the build directory structure used by compile -->
+	<target name="init" depends="clean">
+		<echo message="Create the build directory structure used by compile" />
+		<mkdir dir="${buildProduction}"/>
+		<mkdir dir="${buildStage}"/>
+		<mkdir dir="${buildDev}"/>
+		<mkdir dir="${buildLocal}"/>
+		<mkdir dir="${temp}"/>
+	</target>
+
+	<!-- Create builds for SensingAdmin -->
+	<target name="buildSensingAdmin" depends="init">
+		
+		<echo message="Prepare temp directory" />
+		<copy todir="${temp}">
+			<fileset dir="${web}"/>
+		</copy>
+
+		<echo>Creating SensingAdmin Local ${file.name}...</echo>
+		<war destfile="${buildLocal}/${file.name}" webxml="${temp}/WEB-INF/web.xml">
+			<fileset dir="${temp}"/>
+			<classes dir="${classes}" />
+		</war>
+
+		<echo>Creating SensingAdmin Devt ${file.name}...</echo>
+		<replace file="${temp}/WEB-INF/classes/log4j.properties" token="log4j.appender.file.File=d:/sensingadmin.log" value="log4j.appender.file.File=/app/SpagoBI-Server-3.3/logs/sensingadmin.log" />
+		<replace file="${temp}/META-INF/context.xml" token="/apache-tomcat-6.0.26/webapps/sensingadmin" value="/sensingadmin" />
+		<replace file="${temp}/META-INF/context.xml" token="jdbc:oracle:thin:@localhost:1521:xe" value="jdbc:oracle:thin:@10.70.194.164:1521:xe" />
+		<replace file="${temp}/META-INF/context.xml" token="MFAEREGP01" value="NSSPAGOBI" />
+		<replace file="${temp}/META-INF/context.xml" token="password=&quot;password&quot;" value="password=&quot;password&quot;" />
+						
+		<war destfile="${buildDev}/${file.name}" webxml="${temp}/WEB-INF/web.xml">
+			<fileset dir="${temp}"/>
+			<classes dir="${classes}" />
+		</war>
+		<unzip src="${buildDev}/${file.name}" dest="${buildDev}/sensingadmin" />
+		
+		<echo>Creating SensingAdmin Staging ${file.name}...</echo>
+		<replace file="${temp}/WEB-INF/classes/log4j.properties" token="log4j.appender.file.File=/app/SpagoBI-Server-3.3/logs/sensingadmin.log" value="log4j.appender.file.File=/usr/local/SpagoBI-Server/logs/sensingadmin.log" />
+		<replace file="${temp}/META-INF/context.xml" token="/sensingadmin" value="/sensingadmin" />
+		<replace file="${temp}/META-INF/context.xml" token="jdbc:oracle:thin:@10.70.194.164:1521:xe" value="jdbc:oracle:thin:@172.17.2.17:1521:CRM" />
+		<replace file="${temp}/META-INF/context.xml" token="NSSPAGOBI" value="USRSENSING1" />
+		<replace file="${temp}/META-INF/context.xml" token="password=&quot;password&quot;" value="password=&quot;Luy_8rchbm&quot;" />
+		
+		<war destfile="${buildStage}/${file.name}" webxml="${temp}/WEB-INF/web.xml">
+			<fileset dir="${temp}"/>
+			<classes dir="${classes}" />
+		</war>
+		<unzip src="${buildStage}/${file.name}" dest="${buildStage}/sensingadmin" />
+		
+		<echo>Creating SensingAdmin Production ${file.name}...</echo>
+		<replace file="${temp}/WEB-INF/classes/log4j.properties" token="log4j.appender.file.File=/usr/local/SpagoBI-Server/logs/sensingadmin.log" value="log4j.appender.file.File=/usr/local/SpagoBI-Server/logs/sensingadmin.log" />
+		<replace file="${temp}/META-INF/context.xml" token="/sensingadmin" value="/sensingadmin" />
+		<replace file="${temp}/META-INF/context.xml" token="jdbc:oracle:thin:@172.17.2.17:1521:CRM" value="jdbc:oracle:thin:@172.16.2.38:1528:CRM" />
+		<replace file="${temp}/META-INF/context.xml" token="USRSENSING1" value="USRSENSING1" />
+		<replace file="${temp}/META-INF/context.xml" token="password=&quot;password&quot;" value="password=&quot;Luy_8rchbm&quot;" />
+				
+		<war destfile="${buildProduction}/${file.name}" webxml="${temp}/WEB-INF/web.xml">
+			<fileset dir="${temp}"/>
+			<classes dir="${classes}" />
+		</war>
+	    <unzip src="${buildProduction}/${file.name}" dest="${buildProduction}/sensingadmin" />
+		
+	</target>
+
+</project>

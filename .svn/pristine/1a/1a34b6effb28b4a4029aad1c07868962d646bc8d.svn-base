@@ -1,0 +1,25 @@
+<#-- global config begin-->
+global.currentyear=FY11/12
+global.FY11/12.val=2011/2012
+global.FY12/13.val=2012/2013
+global.FY13/14.val=2013/2014
+global.FY14/15.val=2014/2015
+global.FY15/16.val=2015/2016
+global.FY16/17.val=2016/2017
+<#-- global config end-->
+
+<#-- page content begin-->
+text.pagetitle=NSP Sensing - KPI Statistics
+text.subpagetitle=KPI
+text.financialyear=Financial Years
+<#-- page content end-->
+
+<#-- kpi validation begin-->
+error.mandatory.fields.financialYear=Please select Financial Year
+error.mandatory.fields.kpiStat=Please enter Kpi stat value
+error.kpistat.nonnumeric=Please enter numeric value only
+<#-- kpi validation end-->
+
+
+
+

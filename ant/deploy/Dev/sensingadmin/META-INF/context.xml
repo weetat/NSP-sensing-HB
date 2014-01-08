@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+	
+
+<Context path="/sensingadmin" docBase="/sensingadmin"
+         debug="0">
+	<Resource name="jdbc/spagobi" auth="Container"
+		  type="javax.sql.DataSource" driverClassName="oracle.jdbc.driver.OracleDriver"
+          url="jdbc:oracle:thin:@10.70.194.164:1521:xe"
+          username="NSSPAGOBI" password="password" maxActive="20" maxIdle="10"
+          maxWait="-1"
+          validationQuery="SELECT SYSDATE FROM DUAL"/>   
+</Context>
